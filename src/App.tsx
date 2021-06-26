@@ -1,19 +1,20 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { eventActionCreator } from './state';
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import WebSocketProvider from './contexts/websocket';
+import HomeScreen from './screens/HomeScreen';
 import './App.css';
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // Establishing websocket connect
-    const websocket = new WebSocket('ws://localhost:8889');
-    console.log(websocket);
-
-    dispatch(eventActionCreator.fetchEvents(websocket));
-  });
-  return <div className='App'>Mini SKY App</div>;
+  return (
+    <Router>
+      <WebSocketProvider>
+        <div className='App'>
+          <Route path='/' component={HomeScreen} exact />
+        </div>
+      </WebSocketProvider>
+    </Router>
+  );
 };
 
 export default App;

@@ -1,10 +1,10 @@
 import { ActionType } from '../constants/eventsConstants';
-import { Action } from '../actions/eventsAction';
+import { Action, Event } from '../actions/eventsAction';
 
 interface EventsState {
   loading: boolean;
   error: string | null;
-  data: string[];
+  data: Event[];
 }
 
 const initialState = {

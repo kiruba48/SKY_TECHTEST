@@ -6,3 +6,6 @@ const reducers = combineReducers({
 });
 
 export default reducers;
+
+// RootState defining to let TS know what exactly is inside the State.
+export type RootState = ReturnType<typeof reducers>;
