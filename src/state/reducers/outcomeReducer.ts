@@ -1,10 +1,13 @@
 import { ActionType } from '../constants/eventsConstants';
-import { Action, EventInterface } from '../actions/eventsAction';
+import {
+  OutcomeAction,
+  EventOutcomeInterface,
+} from '../actions/outcomeInterfaces';
 
-interface EventsState {
+interface OutcomeState {
   loading: boolean;
   error: string | null;
-  data: EventInterface[];
+  data: EventOutcomeInterface[];
 }
 
 const initialState = {
@@ -13,16 +16,16 @@ const initialState = {
   data: [],
 };
 
-export const fetchEventsReducer = (
-  state: EventsState = initialState,
-  action: Action
-): EventsState => {
+export const outcomeReducer = (
+  state: OutcomeState = initialState,
+  action: OutcomeAction
+): OutcomeState => {
   switch (action.type) {
-    case ActionType.EVENT_LIST_REQUEST:
+    case ActionType.EVENT_OUTCOME_REQUEST:
       return { loading: true, error: null, data: [] };
-    case ActionType.EVENT_LIST_SUCCESS:
+    case ActionType.EVENT_OUTCOME_SUCCESS:
       return { loading: false, error: null, data: action.payload };
-    case ActionType.EVENT_LIST_FAIL:
+    case ActionType.EVENT_OUTCOME_FAIL:
       return { loading: false, error: action.payload, data: [] };
     default:
       return state;

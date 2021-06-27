@@ -1,8 +1,12 @@
 import React, { useEffect, useContext } from 'react';
+import { Jumbotron, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useSelector } from '../hooks/useTypedSelector';
 import { eventActionCreator } from '../state';
 import { WebSocketContext } from '../contexts/websocket';
+import Loader from '../components/Loader';
+import Event from '../components/Event';
+import { EventInterface } from '../state/actions/eventsAction';
 
 const HomeScreen: React.FC = () => {
   const dispatch = useDispatch();
@@ -10,9 +14,9 @@ const HomeScreen: React.FC = () => {
 
   const eventList = useSelector((state) => state.events);
   const { data: events, error, loading } = eventList;
-  console.log(events);
 
   useEffect(() => {
+    // Websocket message payload
     const eventPayload = {
       type: 'getLiveEvents',
       primaryMarkets: true,
@@ -22,16 +26,36 @@ const HomeScreen: React.FC = () => {
 
     // eslint-disable-next-line
   }, [dispatch, ws]);
+
+  // Grouping Events by linkedEventTypeName
+  let eventGroup = events.reduce((r: any, a: EventInterface) => {
+    r[a.linkedEventTypeId] = [...(r[a.linkedEventTypeId] || []), a];
+    return r;
+  }, {});
+
+  const eventsArray = Object.values(eventGroup);
+  console.log(eventsArray);
+
   return (
-    <div>
-      APP
-      <ul>
-        {!error &&
-          !loading &&
-          events.length !== 0 &&
-          events.map((event, eventID) => <li key={eventID}>{event.name}</li>)}
-      </ul>
-    </div>
+    <>
+      <Jumbotron fluid style={{ backgroundColor: 'darkblue' }}>
+        <Container className='py-3'>
+          <h1 style={{ color: 'white' }}>Football Live</h1>
+        </Container>
+      </Jumbotron>
+
+      {loading && <Loader />}
+      {/* {!error &&
+        !loading &&
+        events.map((event, eventID) => <Event event={event} key={eventID} />)} */}
+      {!error &&
+        !loading &&
+        eventsArray.map((events: any) => {
+          return events.map((event: EventInterface, eventId: number) => (
+            <Event event={event} key={eventId} />
+          ));
+        })}
+    </>
   );
 };
 

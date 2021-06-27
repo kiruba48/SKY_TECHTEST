@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import { fetchEventsReducer } from '../reducers/eventsReducer';
+import { outcomeReducer } from './outcomeReducer';
 
 const reducers = combineReducers({
   events: fetchEventsReducer,
+  outcomes: outcomeReducer,
 });
 
 export default reducers;

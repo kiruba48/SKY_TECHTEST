@@ -1,9 +1,28 @@
 import { ActionType } from '../constants/eventsConstants';
 
-export interface Event {
+interface Competitors {
+  name: string;
+  position: string;
+}
+
+interface Scores {
+  away: number;
+  home: number;
+}
+
+export interface EventInterface {
   eventId: number;
   name: string | number;
   className: string;
+  linkedEventTypeName: string;
+  linkedEventTypeId: number;
+  typeName: string;
+  typeId: number;
+  linkedEventId: number;
+  markets: number[];
+  competitors: Competitors[];
+  scores: Scores;
+  startTime: string;
 }
 
 export interface EventPayload {
@@ -18,7 +37,7 @@ interface EventListRequestAction {
 
 interface EventListSuccessAction {
   type: ActionType.EVENT_LIST_SUCCESS;
-  payload: Event[];
+  payload: EventInterface[];
 }
 
 interface EventListFailAction {
