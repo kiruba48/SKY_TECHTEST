@@ -21,8 +21,9 @@ const HomeScreen: React.FC = () => {
       type: 'getLiveEvents',
       primaryMarkets: true,
     };
-
-    dispatch(eventActionCreator.fetchEvents(ws, eventPayload));
+    if (events.length === 0) {
+      dispatch(eventActionCreator.fetchEvents(ws, eventPayload));
+    }
 
     // eslint-disable-next-line
   }, [dispatch, ws]);
@@ -34,7 +35,7 @@ const HomeScreen: React.FC = () => {
   }, {});
 
   const eventsArray = Object.values(eventGroup);
-  console.log(eventsArray);
+  // console.log(eventsArray);
 
   return (
     <>
@@ -51,8 +52,8 @@ const HomeScreen: React.FC = () => {
       {!error &&
         !loading &&
         eventsArray.map((events: any) => {
-          return events.map((event: EventInterface, eventId: number) => (
-            <Event event={event} key={eventId} />
+          return events.map((event: EventInterface) => (
+            <Event event={event} key={event.eventId} />
           ));
         })}
     </>

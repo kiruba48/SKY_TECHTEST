@@ -13,14 +13,16 @@ export const fetchEventOutcomes =
     });
 
     try {
-      ws.onopen = () => {
-        ws.send(JSON.stringify(eventPayload));
-      };
+      // console.log(eventPayload);
+
+      ws.send(JSON.stringify(eventPayload));
+
       ws.onmessage = (event: any) => {
         const { type, data } = JSON.parse(event.data);
 
         switch (type) {
           case 'OUTCOME_DATA': {
+            // console.log(data);
             dispatch({
               type: ActionType.EVENT_OUTCOME_SUCCESS,
               payload: data,

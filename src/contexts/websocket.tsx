@@ -7,7 +7,12 @@ interface WSProps {
 }
 
 const WebSocketProvider: React.FC<WSProps> = ({ children }) => {
-  const ws: WebSocket = new WebSocket('ws://localhost:8889');
+  let ws = null;
+
+  if (!ws) {
+    //  ws: WebSocket = new WebSocket('ws://localhost:8889');
+    ws = new WebSocket('ws://localhost:8889');
+  }
 
   return (
     <WebSocketContext.Provider value={ws}>{children}</WebSocketContext.Provider>

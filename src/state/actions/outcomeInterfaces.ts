@@ -43,7 +43,7 @@ interface EventOutcomeListRequestAction {
 
 interface EventOutcomeListSuccessAction {
   type: ActionType.EVENT_OUTCOME_SUCCESS;
-  payload: EventOutcomeInterface[];
+  payload: EventOutcomeInterface; //EventOutcomeInterface[]
 }
 
 interface EventOutcomeListFailAction {

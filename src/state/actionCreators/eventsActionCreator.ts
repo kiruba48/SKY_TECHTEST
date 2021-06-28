@@ -15,6 +15,7 @@ export const fetchEvents =
       };
       ws.onmessage = (event: any) => {
         const { type, data } = JSON.parse(event.data);
+        // console.log(data);
 
         switch (type) {
           case 'LIVE_EVENTS_DATA': {

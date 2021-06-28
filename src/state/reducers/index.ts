@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { fetchEventsReducer } from '../reducers/eventsReducer';
 import { outcomeReducer } from './outcomeReducer';
+import { marketDataReducer } from './marketDataReducer';
 
 const reducers = combineReducers({
   events: fetchEventsReducer,
   outcomes: outcomeReducer,
+  marketData: marketDataReducer,
 });
 
 export default reducers;

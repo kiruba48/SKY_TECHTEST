@@ -24,7 +24,14 @@ export const outcomeReducer = (
     case ActionType.EVENT_OUTCOME_REQUEST:
       return { loading: true, error: null, data: [] };
     case ActionType.EVENT_OUTCOME_SUCCESS:
-      return { loading: false, error: null, data: action.payload };
+      // const newData = [action.payload];
+      // console.log(newData);
+
+      return {
+        loading: false,
+        error: null,
+        data: [...state.data, action.payload],
+      };
     case ActionType.EVENT_OUTCOME_FAIL:
       return { loading: false, error: action.payload, data: [] };
     default:
