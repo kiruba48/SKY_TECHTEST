@@ -1,32 +1,33 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Jumbotron, Container } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
 import { useSelector } from '../hooks/useTypedSelector';
-import { eventActionCreator } from '../state';
-import { WebSocketContext } from '../contexts/websocket';
 import Loader from '../components/Loader';
 import Event from '../components/Event';
 import { EventInterface } from '../state/actions/eventsAction';
+import { ws } from '../ws';
+import Message from '../components/outcomeComponents/Message';
 
 const HomeScreen: React.FC = () => {
-  const dispatch = useDispatch();
-  const ws = useContext(WebSocketContext);
-
   const eventList = useSelector((state) => state.events);
   const { data: events, error, loading } = eventList;
 
+  const sendMessage = (): void => {
+    ws.onopen = () => {
+      ws.send(
+        JSON.stringify({
+          type: 'getLiveEvents',
+          primaryMarkets: true,
+        })
+      );
+    };
+  };
+
   useEffect(() => {
     // Websocket message payload
-    const eventPayload = {
-      type: 'getLiveEvents',
-      primaryMarkets: true,
-    };
-    if (events.length === 0) {
-      dispatch(eventActionCreator.fetchEvents(ws, eventPayload));
-    }
+    sendMessage();
 
     // eslint-disable-next-line
-  }, [dispatch, ws]);
+  }, []);
 
   // Grouping Events by linkedEventTypeName
   let eventGroup = events.reduce((r: any, a: EventInterface) => {
@@ -35,7 +36,6 @@ const HomeScreen: React.FC = () => {
   }, {});
 
   const eventsArray = Object.values(eventGroup);
-  // console.log(eventsArray);
 
   return (
     <>
@@ -46,9 +46,8 @@ const HomeScreen: React.FC = () => {
       </Jumbotron>
 
       {loading && <Loader />}
-      {/* {!error &&
-        !loading &&
-        events.map((event, eventID) => <Event event={event} key={eventID} />)} */}
+      {error && <Message variant='danger'>{error}</Message>}
+
       {!error &&
         !loading &&
         eventsArray.map((events: any) => {

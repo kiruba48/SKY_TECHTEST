@@ -1,45 +1,66 @@
-import React, { useEffect, useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { outcomeActionCreator } from '../state';
-import { WebSocketContext } from '../contexts/websocket';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from '../hooks/useTypedSelector';
+import { MarketDataInterface } from '../state/actions/marketDataInterfaces';
+import { EventOutcomeInterface } from '../state/actions/outcomeInterfaces';
+import BothScoreNoDraw from './outcomeComponents/BothScoreNoDraw';
+import HalfTimeFullTime from './outcomeComponents/HalfTimeFullTime';
+import FullTimeResult from './outcomeComponents/FullTimeResult';
+
+import { ws } from '../ws';
+import Message from './outcomeComponents/Message';
 
 interface OutcomeList {
   outcomes: number[];
+  market: MarketDataInterface;
 }
 
-export const OutcomeDisplay: React.FC<OutcomeList> = ({ outcomes }) => {
-  const dispatch = useDispatch();
-  const ws = useContext(WebSocketContext);
+export const OutcomeDisplay: React.FC<OutcomeList> = ({ outcomes, market }) => {
+  const marketOutcomes = useSelector((state) => state.outcomes);
+  const { loading, error, data: outcomesData } = marketOutcomes;
 
-  //   let eventOutcomePayload = {
-  //     type: 'getOutcome',
-  //     id: outcome,
-  //   };
+  const filteredOutcomes = useMemo(() => {
+    return outcomesData.filter(
+      (outcome) => outcome.marketId === market.marketId
+    );
+  }, [market.marketId, outcomesData]);
 
-  //   dispatch(
-  //     outcomeActionCreator.fetchEventOutcomes(ws, eventOutcomePayload)
-  //   );
-  //   const outcomesToDispatch = outcomes.map((outcome) => ({
-  //     type: 'getOutcome',
-  //     id: outcome,
-  //   }));
-  //   console.log(outcomesToDispatch);
+  const populateData = (outcome: EventOutcomeInterface) => {
+    switch (market.name) {
+      case 'Half-Time/Full-Time':
+        return <HalfTimeFullTime outcome={outcome} key={outcome.outcomeId} />;
+      case 'Both Score No Draw':
+        return <BothScoreNoDraw outcome={outcome} key={outcome.outcomeId} />;
+      case 'Full Time Result':
+        return <FullTimeResult outcome={outcome} key={outcome.outcomeId} />;
+      default:
+        return <div>Dont know</div>;
+    }
+  };
+
+  const sendMessage = (): void => {
+    outcomes.map((outcome) => {
+      ws.send(
+        JSON.stringify({
+          type: 'getOutcome',
+          id: outcome,
+        })
+      );
+    });
+  };
 
   useEffect(() => {
-    outcomes.map((outcome) => {
-      const outcomePayload = {
-        type: 'getOutcome',
-        id: outcome,
-      };
-      return setTimeout(() => {
-        dispatch(outcomeActionCreator.fetchEventOutcomes(ws, outcomePayload));
-      }, 2000);
-      // if (index === outcomes.length - 1) {
-      // }
-    });
-  }, [ws, outcomes, dispatch]);
+    if (outcomesData.length === 0) {
+      sendMessage();
+    }
+    // eslint-disable-next-line
+  }, []);
 
-  return <div>Display Outcome</div>;
+  return (
+    <>
+      {error && <Message variant='danger'>{error}</Message>}
+      {!loading && !error && filteredOutcomes.map(populateData)}
+    </>
+  );
 };
 
 export default OutcomeDisplay;

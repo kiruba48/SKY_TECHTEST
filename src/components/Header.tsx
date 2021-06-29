@@ -16,7 +16,7 @@ const Header: React.FC = () => {
           {/* <Navbar.Toggle aria-controls='basic-navbar-nav' /> */}
           <DropdownButton
             id='dropdown-item-button'
-            title='Betting Odds view'
+            title={bettingView}
             variant='danger'
           >
             <Dropdown.ItemText>Toggle to change</Dropdown.ItemText>

@@ -12,7 +12,7 @@ interface MarketDataState {
 const initialState = {
   loading: false,
   error: null,
-  data: [], //[]
+  data: [],
 };
 
 export const marketDataReducer = (
@@ -21,7 +21,7 @@ export const marketDataReducer = (
 ): MarketDataState => {
   switch (action.type) {
     case ActionType.EVENT_MARKET_DATA_REQUEST:
-      return { loading: true, error: null, data: [] };
+      return { ...state, loading: true, error: null };
     case ActionType.EVENT_MARKET_DATA_SUCCESS:
       // const newMarketData =
 

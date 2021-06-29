@@ -1,24 +1,20 @@
-import React, { useEffect, useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
 import { useSelector } from '../hooks/useTypedSelector';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Col, Row, Badge } from 'react-bootstrap';
 import { ListGroup } from 'react-bootstrap';
 import { EventInterface } from '../state/actions/eventsAction';
-import { WebSocketContext } from '../contexts/websocket';
-import { marketDataActionCreator } from '../state';
 import PrimaryMarket from './PrimaryMarket';
+import { ws } from '../ws';
 
 interface EventComponent {
   event: EventInterface;
 }
 
 const Event: React.FC<EventComponent> = ({ event }) => {
-  const ws = useContext(WebSocketContext);
   const eventDate = new Date(event.startTime);
   const eventStartTime = eventDate.toString().substring(15, 21); // To extract startTime
-  const dispatch = useDispatch();
-  const marketId = event.markets[0]; // to extract market ID
+  // const marketId = event.markets[0]; // to extract market ID
 
   const marketData = useSelector((state) => state.marketData);
   const { data: primaryMarket } = marketData;
@@ -26,18 +22,27 @@ const Event: React.FC<EventComponent> = ({ event }) => {
   const eventPrimaryMarket = primaryMarket.filter(
     (market) => market.eventId === event.eventId
   );
+  // Taking the object out of the array.
+  const primaryMarketData = eventPrimaryMarket[0];
+
+  const sendMessage = (): void => {
+    event.markets.map((marketId) => {
+      ws.send(
+        JSON.stringify({
+          type: 'getMarket',
+          id: marketId,
+        })
+      );
+    });
+  };
 
   useEffect(() => {
     // Payload to get market data
-    const marketDataPayload = {
-      type: 'getMarket',
-      id: marketId,
-    };
-
     if (event.eventId) {
-      dispatch(marketDataActionCreator.fetchMarketData(ws, marketDataPayload));
+      sendMessage();
     }
-  }, [dispatch, ws, marketId, event]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <ListGroup>
@@ -45,7 +50,7 @@ const Event: React.FC<EventComponent> = ({ event }) => {
         <ListGroup.Item action>
           <Row>
             <Col md={4}>
-              <h5>
+              <h5 style={{ color: 'red', fontWeight: 'bold' }}>
                 {event.linkedEventTypeName
                   ? event.linkedEventTypeName
                   : event.typeName}
@@ -73,7 +78,7 @@ const Event: React.FC<EventComponent> = ({ event }) => {
       </LinkContainer>
 
       <ListGroup.Item>
-        <PrimaryMarket marketData={eventPrimaryMarket} />
+        <PrimaryMarket marketData={primaryMarketData} />
       </ListGroup.Item>
     </ListGroup>
   );

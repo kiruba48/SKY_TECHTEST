@@ -6,7 +6,10 @@ import {
 } from '../actions/outcomeInterfaces';
 
 export const fetchEventOutcomes =
-  (ws: any, eventPayload: EventOutcomePayload) =>
+  (
+    ws: any,
+    outcomes: number[] //EventOutcomePayload
+  ) =>
   async (dispatch: Dispatch<OutcomeAction>) => {
     dispatch({
       type: ActionType.EVENT_OUTCOME_REQUEST,
@@ -14,8 +17,15 @@ export const fetchEventOutcomes =
 
     try {
       // console.log(eventPayload);
-
-      ws.send(JSON.stringify(eventPayload));
+      outcomes.map((outcome) =>
+        ws.send(
+          JSON.stringify({
+            type: 'getOutcome',
+            id: outcome,
+          })
+        )
+      );
+      // ws.send(JSON.stringify(eventPayload));
 
       ws.onmessage = (event: any) => {
         const { type, data } = JSON.parse(event.data);

@@ -3,11 +3,11 @@ import { ListGroup } from 'react-bootstrap';
 import { EventOutcomeInterface } from '../../state/actions/outcomeInterfaces';
 import { BettingOddsViewContext } from '../../contexts/BettingOddsViewProvider';
 
-interface BSNDComponent {
+interface FTRComponent {
   outcome: EventOutcomeInterface;
 }
 
-const BothScoreNoDraw: React.FC<BSNDComponent> = ({ outcome }) => {
+const FullTimeResult: React.FC<FTRComponent> = ({ outcome }) => {
   const { bettingView } = useContext(BettingOddsViewContext);
 
   const fraction = `${outcome.price.num} / ${outcome.price.den}`;
@@ -18,6 +18,7 @@ const BothScoreNoDraw: React.FC<BSNDComponent> = ({ outcome }) => {
         <ListGroup.Item style={{ width: '50rem' }}>
           {outcome.name}
         </ListGroup.Item>
+
         <ListGroup.Item action style={{ color: 'red' }}>
           {bettingView === 'fractional'
             ? fraction
@@ -30,11 +31,4 @@ const BothScoreNoDraw: React.FC<BSNDComponent> = ({ outcome }) => {
   );
 };
 
-export default BothScoreNoDraw;
-
-{
-  /* <Row>
-            <Col md={8}>{outcome.name}</Col>
-            <Col md={4}>{outcome.price.decimal}</Col>
-          </Row> */
-}
+export default FullTimeResult;
