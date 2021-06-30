@@ -2,22 +2,15 @@ import { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useSelector } from '../hooks/useTypedSelector';
 import { Jumbotron, Container, Badge } from 'react-bootstrap';
-import { EventDataInterface } from '../state/actions/eventDataInterface';
 import { ws } from '../ws';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import Message from '../components/outcomeComponents/Message';
-import PrimaryMarket from '../components/PrimaryMarket';
+import Event from '../components/Event';
 
 interface TParams {
   id: string;
-}
-
-interface EDateInterface {
-  loading: boolean;
-  error: string;
-  data: EventDataInterface;
 }
 
 const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
@@ -28,10 +21,12 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
     loading,
     error,
     data: eventData,
-  }: EDateInterface = useSelector((state) => state.eventData);
+  } = useSelector((state) => state.eventData);
 
-  const eventDate = new Date(eventData.startTime);
-  const eventStartTime = eventDate.toString().substring(15, 21); // To extract startTime
+  const eventDate = eventData && new Date(eventData.startTime);
+  const eventStartTime = eventDate && eventDate.toString().substring(15, 21); // To extract startTime
+
+  // console.log(eventData);
 
   const sendMessage = () => {
     ws.send(
@@ -43,7 +38,9 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
   };
 
   useEffect(() => {
-    sendMessage();
+    if (!eventData) {
+      sendMessage();
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -68,8 +65,12 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
                 <Row>
                   <Col md={6}>
                     <Row>
-                      <Col md={4}>competitor-1</Col>
-                      <Col md={8}>
+                      <Col md={6}>
+                        <h4 style={{ color: 'white' }}>
+                          {eventData.competitors[0].name}
+                        </h4>
+                      </Col>
+                      <Col md={6}>
                         <Badge
                           className='p-3'
                           variant='danger'
@@ -80,7 +81,7 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
                             borderRadius: '0.5rem',
                           }}
                         >
-                          {/* {eventData.scores.home} */}
+                          {eventData.scores.home}
                         </Badge>
                       </Col>
                     </Row>
@@ -88,7 +89,7 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
                   {/*  */}
                   <Col md={6}>
                     <Row>
-                      <Col md={5}>
+                      <Col md={3}>
                         <Badge
                           className='p-3'
                           variant='danger'
@@ -99,10 +100,14 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
                             borderRadius: '0.5rem',
                           }}
                         >
-                          {/* {eventData.scores.away} */}
+                          {eventData.scores.away}
                         </Badge>
                       </Col>
-                      <Col md={7}>competitor-2</Col>
+                      <Col md={9}>
+                        <h4 style={{ color: 'white' }}>
+                          {eventData.competitors[1].name}
+                        </h4>
+                      </Col>
                     </Row>
                   </Col>
                 </Row>
@@ -116,8 +121,11 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
           </Container>
         </Jumbotron>
       )}
-      <Container></Container>
+      <Container className='mt-3'>
+        {eventData && <Event event={eventData} screen='event' />}
+      </Container>
     </>
+    // <div></div>
   );
 };
 

@@ -11,7 +11,7 @@ const HomeScreen: React.FC = () => {
   const eventList = useSelector((state) => state.events);
   const { data: events, error, loading } = eventList;
 
-  const sendMessage = (): void => {
+  const sendMessage = () => {
     ws.onopen = () => {
       ws.send(
         JSON.stringify({
@@ -24,7 +24,9 @@ const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     // Websocket message payload
-    sendMessage();
+    if (events.length <= 0) {
+      sendMessage();
+    }
 
     // eslint-disable-next-line
   }, []);
@@ -52,7 +54,7 @@ const HomeScreen: React.FC = () => {
         !loading &&
         eventsArray.map((events: any) => {
           return events.map((event: EventInterface) => (
-            <Event event={event} key={event.eventId} />
+            <Event event={event} key={event.eventId} screen='home' />
           ));
         })}
     </>

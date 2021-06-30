@@ -17,8 +17,6 @@ const PrimaryMarket: React.FC<PrimaryMarketComponent> = ({ marketData }) => {
               <h5>{marketData.name}</h5>
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
-              {/* <Card.Body>Hello! I'm the body</Card.Body> */}
-
               <OutcomeDisplay
                 outcomes={marketData.outcomes}
                 market={marketData}

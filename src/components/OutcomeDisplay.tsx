@@ -5,7 +5,6 @@ import { EventOutcomeInterface } from '../state/actions/outcomeInterfaces';
 import BothScoreNoDraw from './outcomeComponents/BothScoreNoDraw';
 import HalfTimeFullTime from './outcomeComponents/HalfTimeFullTime';
 import FullTimeResult from './outcomeComponents/FullTimeResult';
-
 import { ws } from '../ws';
 import Message from './outcomeComponents/Message';
 
@@ -24,6 +23,7 @@ export const OutcomeDisplay: React.FC<OutcomeList> = ({ outcomes, market }) => {
     );
   }, [market.marketId, outcomesData]);
 
+  // Populate outcome data with appropriate layouts
   const populateData = (outcome: EventOutcomeInterface) => {
     switch (market.name) {
       case 'Half-Time/Full-Time':
@@ -33,13 +33,13 @@ export const OutcomeDisplay: React.FC<OutcomeList> = ({ outcomes, market }) => {
       case 'Full Time Result':
         return <FullTimeResult outcome={outcome} key={outcome.outcomeId} />;
       default:
-        return <div>Dont know</div>;
+        return;
     }
   };
 
   const sendMessage = (): void => {
     outcomes.map((outcome) => {
-      ws.send(
+      return ws.send(
         JSON.stringify({
           type: 'getOutcome',
           id: outcome,

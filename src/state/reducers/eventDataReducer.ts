@@ -7,26 +7,25 @@ import {
 interface EventDataState {
   loading: boolean;
   error: string | null;
-  data: EventDataInterface[];
+  data?: EventDataInterface;
 }
 
-const initialState = {
+const initialState: EventDataState = {
   loading: false,
   error: null,
-  data: [],
 };
 
 export const eventDataReducer = (
-  state: EventDataState = initialState,
+  state = initialState,
   action: EventDataAction
 ) => {
   switch (action.type) {
     case ActionType.EVENT_DATA_REQUEST:
-      return { loading: true, error: null, data: [] };
+      return { loading: true, error: null };
     case ActionType.EVENT_DATA_SUCCESS:
       return { loading: false, error: null, data: action.payload };
     case ActionType.EVENT_DATA_FAIL:
-      return { loading: false, error: action.payload, data: [] };
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

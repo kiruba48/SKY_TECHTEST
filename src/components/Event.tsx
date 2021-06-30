@@ -6,28 +6,28 @@ import { ListGroup } from 'react-bootstrap';
 import { EventInterface } from '../state/actions/eventsAction';
 import PrimaryMarket from './PrimaryMarket';
 import { ws } from '../ws';
+import { EventDataInterface } from '../state/actions/eventDataInterface';
 
 interface EventComponent {
-  event: EventInterface;
+  event: EventInterface | EventDataInterface;
+  screen: string;
 }
 
-const Event: React.FC<EventComponent> = ({ event }) => {
+const Event: React.FC<EventComponent> = ({ event, screen }) => {
   const eventDate = new Date(event.startTime);
   const eventStartTime = eventDate.toString().substring(15, 21); // To extract startTime
-  // const marketId = event.markets[0]; // to extract market ID
 
   const marketData = useSelector((state) => state.marketData);
   const { data: primaryMarket } = marketData;
+
   // Filtering the primary market with event Id to populate the data
   const eventPrimaryMarket = primaryMarket.filter(
     (market) => market.eventId === event.eventId
   );
-  // Taking the object out of the array.
-  const primaryMarketData = eventPrimaryMarket[0];
 
   const sendMessage = (): void => {
     event.markets.map((marketId) => {
-      ws.send(
+      return ws.send(
         JSON.stringify({
           type: 'getMarket',
           id: marketId,
@@ -35,6 +35,8 @@ const Event: React.FC<EventComponent> = ({ event }) => {
       );
     });
   };
+
+  // const findScreen = screen === 'home' ?
 
   useEffect(() => {
     // Payload to get market data
@@ -46,39 +48,44 @@ const Event: React.FC<EventComponent> = ({ event }) => {
 
   return (
     <ListGroup>
-      <LinkContainer to={`/event/${event.eventId}`}>
-        <ListGroup.Item action>
-          <Row>
-            <Col md={4}>
-              <h5 style={{ color: 'red', fontWeight: 'bold' }}>
-                {event.linkedEventTypeName
-                  ? event.linkedEventTypeName
-                  : event.typeName}
-              </h5>
-              <span>{eventStartTime}</span>
-            </Col>
-            <Col md={4}>
-              <h5>{event.name}</h5>
-            </Col>
-            <Col md={4}>
-              <Badge
-                className='py-3'
-                variant='danger'
-                style={{
-                  backgroundColor: 'darkblue',
-                  marginLeft: '10rem',
-                  borderRadius: '0.5rem',
-                }}
-              >
-                {event.scores.away} - {event.scores.home}
-              </Badge>
-            </Col>
-          </Row>
-        </ListGroup.Item>
-      </LinkContainer>
+      {screen === 'home' && (
+        <LinkContainer to={`/event/${event.eventId}`}>
+          <ListGroup.Item action>
+            <Row>
+              <Col md={4}>
+                <h5 style={{ color: 'red', fontWeight: 'bold' }}>
+                  {event.linkedEventTypeName
+                    ? event.linkedEventTypeName
+                    : event.typeName}
+                </h5>
+                <span>{eventStartTime}</span>
+              </Col>
+              <Col md={4}>
+                <h5>{event.name}</h5>
+              </Col>
+              <Col md={4}>
+                <Badge
+                  className='py-3'
+                  variant='danger'
+                  style={{
+                    backgroundColor: 'darkblue',
+                    marginLeft: '10rem',
+                    borderRadius: '0.5rem',
+                  }}
+                >
+                  {event.scores.away} - {event.scores.home}
+                </Badge>
+              </Col>
+            </Row>
+          </ListGroup.Item>
+        </LinkContainer>
+      )}
 
       <ListGroup.Item>
-        <PrimaryMarket marketData={primaryMarketData} />
+        {eventPrimaryMarket.map((market) => (
+          <PrimaryMarket marketData={market} key={market.marketId} />
+        ))}
+        {/* <PrimaryMarket marketData={primaryMarketData} /> */}
       </ListGroup.Item>
     </ListGroup>
   );

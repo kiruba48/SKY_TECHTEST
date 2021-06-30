@@ -24,10 +24,6 @@ export const outcomeReducer = (
     case ActionType.EVENT_OUTCOME_REQUEST:
       return { ...state, loading: true, error: null };
     case ActionType.EVENT_OUTCOME_SUCCESS:
-      // const newData = [action.payload];
-      // console.log(newData);
-      // console.log(action.payload);
-
       return {
         loading: false,
         error: null,

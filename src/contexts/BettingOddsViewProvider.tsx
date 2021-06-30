@@ -8,7 +8,7 @@ interface BVInterface {
 export const BettingOddsViewContext = createContext<BVInterface>({
   bettingView: '',
   changeBettingView: null,
-}); //SOS
+});
 
 const BettingOddsViewProvider: React.FC = ({ children }) => {
   const [bettingView, setBettingView] = useState('fractional');
