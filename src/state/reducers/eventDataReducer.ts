@@ -26,6 +26,8 @@ export const eventDataReducer = (
       return { loading: false, error: null, data: action.payload };
     case ActionType.EVENT_DATA_FAIL:
       return { loading: false, error: action.payload };
+    case ActionType.EVENT_DATA_RESET:
+      return { loading: false, error: null };
     default:
       return state;
   }

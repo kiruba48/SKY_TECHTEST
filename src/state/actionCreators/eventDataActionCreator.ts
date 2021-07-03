@@ -1,6 +1,10 @@
+import { Dispatch } from 'redux'; //type def for dispatch function
 import { store } from '../store';
 import { ActionType } from '../constants/eventsConstants';
-import { EventDataInterface } from '../actions/eventDataInterface';
+import {
+  EventDataInterface,
+  EventDataAction,
+} from '../actions/eventDataInterface';
 
 export const fetchEventData = (data: EventDataInterface) => {
   store.dispatch({
@@ -18,3 +22,10 @@ export const fetchEventData = (data: EventDataInterface) => {
     });
   }
 };
+
+export const resetEventData =
+  () => async (dispatch: Dispatch<EventDataAction>) => {
+    dispatch({
+      type: ActionType.EVENT_DATA_RESET,
+    });
+  };

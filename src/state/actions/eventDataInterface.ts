@@ -53,7 +53,12 @@ interface EventDataFailAction {
   payload: string;
 }
 
+interface EventDataResetAction {
+  type: ActionType.EVENT_DATA_RESET;
+}
+
 export type EventDataAction =
   | EventDataRequestAction
   | EventDataSuccessAction
-  | EventDataFailAction;
+  | EventDataFailAction
+  | EventDataResetAction;

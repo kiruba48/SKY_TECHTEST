@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from '../hooks/useTypedSelector';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Col, Row, Badge } from 'react-bootstrap';
@@ -7,6 +8,7 @@ import { EventInterface } from '../state/actions/eventsAction';
 import PrimaryMarket from './PrimaryMarket';
 import { ws } from '../ws';
 import { EventDataInterface } from '../state/actions/eventDataInterface';
+import { marketDataActionCreator } from '../state';
 
 interface EventComponent {
   event: EventInterface | EventDataInterface;
@@ -14,6 +16,8 @@ interface EventComponent {
 }
 
 const Event: React.FC<EventComponent> = ({ event, screen }) => {
+  const dispatch = useDispatch();
+
   const eventDate = new Date(event.startTime);
   const eventStartTime = eventDate.toString().substring(15, 21); // To extract startTime
 
@@ -36,9 +40,11 @@ const Event: React.FC<EventComponent> = ({ event, screen }) => {
     });
   };
 
-  // const findScreen = screen === 'home' ?
-
   useEffect(() => {
+    //Reset marketData state
+    if (primaryMarket.length !== 0) {
+      dispatch(marketDataActionCreator.resetMarketData());
+    }
     // Payload to get market data
     if (event.eventId) {
       sendMessage();
@@ -82,13 +88,23 @@ const Event: React.FC<EventComponent> = ({ event, screen }) => {
       )}
 
       <ListGroup.Item>
-        {eventPrimaryMarket.map((market) => (
-          <PrimaryMarket marketData={market} key={market.marketId} />
-        ))}
-        {/* <PrimaryMarket marketData={primaryMarketData} /> */}
+        {eventPrimaryMarket.map((market) => {
+          return (
+            market.status.displayable && (
+              <PrimaryMarket marketData={market} key={market.marketId} />
+            )
+          );
+        })}
       </ListGroup.Item>
     </ListGroup>
   );
 };
 
 export default Event;
+
+// <ListGroup.Item>
+//         {eventPrimaryMarket.map((market) => (
+//           <PrimaryMarket marketData={market} key={market.marketId} />
+//         ))}
+//         {/* <PrimaryMarket marketData={primaryMarketData} /> */}
+//       </ListGroup.Item>

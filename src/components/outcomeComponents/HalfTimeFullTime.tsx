@@ -31,23 +31,32 @@ const HalfTimeFullTime: React.FC<HTFTComponent> = ({ outcome }) => {
       dispatch(betSlipActionCreator.addToBetSlipAction(outcome));
     }
   };
+
   return (
     <div>
       <ListGroup horizontal>
         <ListGroup.Item style={{ width: '100rem' }}>
           {outcome.name}
         </ListGroup.Item>
-        <ListGroup.Item
-          action
-          style={{ color: 'red', paddingLeft: '9rem' }}
-          onClick={dispatchOutcome}
-        >
-          {bettingView === 'fractional'
-            ? fraction
-            : bettingView === 'decimal'
-            ? decimal
-            : null}
-        </ListGroup.Item>
+        {outcome.status.suspended ? (
+          <ListGroup.Item style={{ color: 'gray', padding: '0 10.84rem' }}>
+            Susp
+          </ListGroup.Item>
+        ) : (
+          <ListGroup.Item
+            action
+            style={{ color: 'red', paddingLeft: '9rem' }}
+            onClick={dispatchOutcome}
+          >
+            {foundOnBetSlip()
+              ? 'Selected'
+              : bettingView === 'fractional'
+              ? fraction
+              : bettingView === 'decimal'
+              ? decimal
+              : null}
+          </ListGroup.Item>
+        )}
       </ListGroup>
     </div>
   );

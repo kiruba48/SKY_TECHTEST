@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { betSlipActionCreator } from '../state';
 import { BettingOddsViewContext } from '../contexts/BettingOddsViewProvider';
 import { useSelector } from '../hooks/useTypedSelector';
-
 import {
   Jumbotron,
   Container,
@@ -13,9 +12,19 @@ import {
   Row,
   Button,
 } from 'react-bootstrap';
+import BetSlipForm from './BetSlipForm';
 
 const MyBetSlip: React.FC = () => {
   const bettingData = useSelector((state) => state.betSlip);
+
+  // Accessing event data from state
+  const eventList = useSelector((state) => state.events);
+  const { data: events } = eventList;
+
+  // Access Market data from state
+  const marketData = useSelector((state) => state.marketData);
+  const { data: markets } = marketData;
+
   // Betting View: Decimal and Fractional
   const { bettingView } = useContext(BettingOddsViewContext);
   const dispatch = useDispatch();
@@ -26,6 +35,18 @@ const MyBetSlip: React.FC = () => {
 
   const resetBetSlip = () => {
     dispatch(betSlipActionCreator.resetBetSlipAction());
+  };
+
+  const findMarket = (marketId: number) => {
+    return markets.find((market) => {
+      return market.marketId === marketId;
+    });
+  };
+
+  const findEvent = (eventId: number) => {
+    return events.find((event) => {
+      return event.eventId === eventId;
+    });
   };
 
   return (
@@ -81,6 +102,15 @@ const MyBetSlip: React.FC = () => {
                         </Button>
                       </Col>
                     </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <span>
+                      {findMarket(bet.marketId)?.name} -{' '}
+                      {findEvent(bet.eventId)?.name}
+                    </span>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <BetSlipForm betInput={bet.price.decimal} />
                   </ListGroup.Item>
                 </ListGroup>
               </ListGroup.Item>

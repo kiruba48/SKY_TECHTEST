@@ -23,8 +23,6 @@ export const marketDataReducer = (
     case ActionType.EVENT_MARKET_DATA_REQUEST:
       return { ...state, loading: true, error: null };
     case ActionType.EVENT_MARKET_DATA_SUCCESS:
-      // const newMarketData =
-
       return {
         loading: false,
         error: null,
@@ -32,6 +30,8 @@ export const marketDataReducer = (
       };
     case ActionType.EVENT_MARKET_DATA_FAIL:
       return { loading: false, error: action.payload, data: [] };
+    case ActionType.EVENT_MARKET_DATA_RESET:
+      return { loading: false, error: null, data: [] };
     default:
       return state;
   }

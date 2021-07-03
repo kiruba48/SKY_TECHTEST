@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { useSelector } from '../hooks/useTypedSelector';
 import { Jumbotron, Container, Badge } from 'react-bootstrap';
@@ -8,13 +9,15 @@ import { Col } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import Message from '../components/outcomeComponents/Message';
 import Event from '../components/Event';
+import { eventDataActionCreator } from '../state';
 
 interface TParams {
   id: string;
 }
 
 const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
-  // console.log(match.params.id);
+  const dispatch = useDispatch();
+
   const eventId = Number(match.params.id); // converting to
 
   const {
@@ -38,9 +41,11 @@ const EventScreen = ({ match }: RouteComponentProps<TParams>) => {
   };
 
   useEffect(() => {
-    if (!eventData) {
-      sendMessage();
+    if (eventData) {
+      dispatch(eventDataActionCreator.resetEventData());
     }
+    sendMessage();
+
     // eslint-disable-next-line
   }, []);
 

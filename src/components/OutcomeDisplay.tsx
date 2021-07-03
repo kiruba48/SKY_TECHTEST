@@ -27,11 +27,23 @@ export const OutcomeDisplay: React.FC<OutcomeList> = ({ outcomes, market }) => {
   const populateData = (outcome: EventOutcomeInterface) => {
     switch (market.name) {
       case 'Half-Time/Full-Time':
-        return <HalfTimeFullTime outcome={outcome} key={outcome.outcomeId} />;
+        return (
+          outcome.status.displayable && (
+            <HalfTimeFullTime outcome={outcome} key={outcome.outcomeId} />
+          )
+        );
       case 'Both Score No Draw':
-        return <BothScoreNoDraw outcome={outcome} key={outcome.outcomeId} />;
+        return (
+          outcome.status.displayable && (
+            <BothScoreNoDraw outcome={outcome} key={outcome.outcomeId} />
+          )
+        );
       case 'Full Time Result':
-        return <FullTimeResult outcome={outcome} key={outcome.outcomeId} />;
+        return (
+          outcome.status.displayable && (
+            <FullTimeResult outcome={outcome} key={outcome.outcomeId} />
+          )
+        );
       default:
         return;
     }

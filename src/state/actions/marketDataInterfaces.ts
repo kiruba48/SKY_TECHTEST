@@ -39,7 +39,12 @@ interface MarketDataFailAction {
   payload: string;
 }
 
+interface MarketDataResetAction {
+  type: ActionType.EVENT_MARKET_DATA_RESET;
+}
+
 export type MarketDataAction =
   | MarketDataRequestAction
   | MarketDataSuccessAction
-  | MarketDataFailAction;
+  | MarketDataFailAction
+  | MarketDataResetAction;
