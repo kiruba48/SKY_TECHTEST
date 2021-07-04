@@ -1,4 +1,8 @@
-# Getting Started
+# SKY BETTING AND GAMING TECT TEST
+
+[![Test](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml/badge.svg)](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml)
+
+## Getting Started
 
 This project is for the purpose of showcasing my technical skill for an interview at Sky Betting and Gaming.
 
