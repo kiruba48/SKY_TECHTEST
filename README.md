@@ -1,4 +1,4 @@
-# SKY BETTING AND GAMING TECT TEST
+# SKY BETTING AND GAMING TECH TEST
 
 [![Test](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml/badge.svg)](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml)
 
