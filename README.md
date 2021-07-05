@@ -1,6 +1,20 @@
-# SKY BETTING AND GAMING TECH TEST
+# SKY BETTING AND GAMING TECH TEST - V2
 
 [![Test](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml/badge.svg)](https://github.com/kiruba48/SKY_TECHTEST/actions/workflows/test.yml)
+
+This version of tech test includes,
+
+- Fixed the bug occurs when navigating back to home screen from event screen by adding reset functionality to Redux state.
+
+- Included the Redux eventData state reset functionality to fix the bug in loading event data.
+
+- Added filtering the markets and outcomes display to user using `displayable` status.
+
+- Added displaying suspended outcome using `status.suspended`.
+
+- Added accessibility functionality, when user select an outcome to bet the display will change to `selected`.
+
+- Added Full event and market information to the `MyBetSlip` along with bets return display.
 
 ## Getting Started
 
@@ -45,7 +59,33 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ---
 
-## App Demo
+## Updated Version App Demo - V2
+
+### Market Outcome Display V2
+
+Updated the outcome display according to `status.suspended` property.
+
+![outcome display v2](images/outcomeDisplay_1_V2.png)
+
+### Market Outcome Display V2
+
+Updated the outcome display according to `status.suspended` property.
+
+![outcome display v2](images/outcomeDisplay_2_V2.png)
+
+### Market Outcome Display when selected
+
+Updated the outcome display according to `status.suspended` property and the odds changes to selected when customer select to place bet.
+
+![outcome display v2](images/outcomeDisplay_selected.png)
+
+### My Bet Slip
+
+Bet Slip displays the chosen outcome with full details of event, market and odds with bets return price that the user desires to bet.
+
+![bet slip](images/MyBetSlip_V2.png)
+
+## App Demo - V1
 
 ### Main Events Page
 

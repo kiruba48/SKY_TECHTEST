@@ -13,6 +13,7 @@ const BetSlipForm: React.FC<BetInput> = ({ betInput }) => {
       <Row>
         <Col>
           <Form.Control
+            id={betInput}
             type='input'
             placeholder='£'
             value={betAmount}
