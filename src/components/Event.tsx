@@ -101,10 +101,3 @@ const Event: React.FC<EventComponent> = ({ event, screen }) => {
 };
 
 export default Event;
-
-// <ListGroup.Item>
-//         {eventPrimaryMarket.map((market) => (
-//           <PrimaryMarket marketData={market} key={market.marketId} />
-//         ))}
-//         {/* <PrimaryMarket marketData={primaryMarketData} /> */}
-//       </ListGroup.Item>
